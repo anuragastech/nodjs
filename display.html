@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Display Data</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid gainsboro;
+            align-items: center;
+        }
+
+        body {
+            background-color: black;
+            width: 100%;
+            color: white;
+        }
+
+        th {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Stored Data</h1>
+
+    <div>
+        <table style="width: 80%; font-size: 20px;">
+            <thead>
+                <tr>
+                    <!-- <th>Name</th>
+                    <th>Email</th>
+                    <th>Age</th>
+                    <th></th>
+                    <th></th> -->
+                </tr>
+            </thead>
+            <tbody id="data-container" style="width: 100%; font-size: 20px;">
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            fetch("fetchData.js", {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+            })
+                .then((response) => {
+                    if (!response.ok) {
+                        throw new Error(`Network response was not ok: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then((data) => {
+                    const dataContainer = document.getElementById("data-container");
+
+                    const table = document.createElement("table");
+                    table.style.width = "100%";
+
+                    const thead = document.createElement("thead");
+                    const headerRow = document.createElement("tr");
+
+                    const headers = ["Name", "Email", "Age", "", ""];
+
+                    headers.forEach((headerText) => {
+                        const th = document.createElement("th");
+                        th.textContent = headerText;
+                        headerRow.appendChild(th);
+                    });
+
+                    thead.appendChild(headerRow);
+                    table.appendChild(thead);
+
+                    const tbody = document.createElement("tbody");
+
+                    data.forEach((item) => {
+                        const row = document.createElement("tr");
+
+                        const nameCell = document.createElement("td");
+                        nameCell.textContent = item.name;
+                        row.appendChild(nameCell);
+
+                        const emailCell = document.createElement("td");
+                        emailCell.textContent = item.email;
+                        row.appendChild(emailCell);
+
+                        const ageCell = document.createElement("td");
+                        ageCell.textContent = item.age;
+                        row.appendChild(ageCell);
+
+                        const nullCell = document.createElement("td");
+                        const button = document.createElement("button");
+                        button.style.width = "45px";
+                        button.style.height = "30px";
+                        button.style.color = "white";
+                        button.textContent = "Edit";
+                        nullCell.appendChild(button);
+                        button.style.backgroundColor = "blue";
+                        button.style.border = "2px solid white";
+
+                        row.appendChild(nullCell);
+                        tbody.appendChild(row);
+
+                        const nullCell2 = document.createElement("td");
+                        const button2 = document.createElement("button");
+                        button2.style.width = "65px";
+                        button2.style.height = "30px";
+                        button2.style.color = "black";
+                        button2.textContent = "Delete";
+                        button2.style.border = "2px solid white";
+
+                        nullCell2.appendChild(button2);
+                        button2.style.backgroundColor = "red";
+
+                        // button2.addEventListener("click", () => {
+                        //     tbody.removeChild(row);
+                        // })
+
+                        button2.addEventListener("click", () => {
+                            console.log(item);
+                            const itemId = item.name;
+                            console.log(itemId);
+
+                            fetch(`/delete/${itemId}`, {
+                                method: "DELETE",
+                                headers: {
+                                    "Content-Type": "application/json",
+                                },
+                            })
+                                .then((response) => {
+                                    if (!response.ok) {
+                                        throw new Error(`Network response was not ok: ${response.status}`);
+                                    }
+                                    return response.text();
+                                })
+                                .then((data) => {
+                                 
+                                    console.log("Data deleted on the server:", data);
+
+                                  
+                                    tbody.removeChild(row);
+                                })
+                                .catch((error) => {
+                                    console.error("Error deleting data on the server:", error);
+                                });
+                        });
+
+                        // ****
+
+                        row.appendChild(nullCell2);
+                        tbody.appendChild(row);
+
+                        // ***
+                        button.addEventListener("click", () => {
+                            const nameInput = document.createElement("input");
+                            nameInput.value = item.name;
+
+                            const emailInput = document.createElement("input");
+                            emailInput.value = item.email;
+
+                            const ageInput = document.createElement("input");
+                            ageInput.value = item.age;
+
+                            nameCell.innerHTML = '';
+                            nameCell.appendChild(nameInput);
+
+                            emailCell.innerHTML = '';
+                            emailCell.appendChild(emailInput);
+
+                            ageCell.innerHTML = '';
+                            ageCell.appendChild(ageInput);
+
+                            nullCell.innerHTML = '';
+                            const saveButton = document.createElement("button");
+                            saveButton.style.width = "45px";
+                            saveButton.style.height = "30px";
+                            saveButton.style.color = "white";
+                            saveButton.textContent = "Save";
+                            saveButton.style.backgroundColor = "green";
+
+                            saveButton.addEventListener("click", () => {
+                             
+                                item.name = nameInput.value;
+                                item.email = emailInput.value;
+                                item.age = ageInput.value;
+
+                              
+                                const updatedData = {
+                                    name: item.name,
+                                    email: item.email,
+                                    age: item.age,
+                                };
+
+                              
+                                fetch(`/update/${item.id}`, {
+                                    method: "PUT",
+                                    headers: {
+                                        "Content-Type": "application/json",
+                                    },
+                                    body: JSON.stringify(updatedData), 
+                                })
+                                    .then((response) => {
+                                        if (!response.ok) {
+                                            throw new Error(`Network response was not ok: ${response.status}`);
+                                        }
+                                        return response.text();
+                                    })
+                                    .then((data) => {
+                                     
+                                        console.log("Data updated on the server:", data);
+
+                                        
+                                        nameCell.textContent = item.name;
+                                        emailCell.textContent = item.email;
+                                        ageCell.textContent = item.age;
+
+                                       
+                                        nullCell.innerHTML = '';
+                                        nullCell.appendChild(button);
+                                    })
+                                    .catch((error) => {
+                                        console.error("Error updating data on the server:", error);
+                                    });
+                            });
+
+                            nullCell.appendChild(saveButton);
+                        });
+                    });
+
+                    
+                    table.appendChild(tbody);
+                    dataContainer.appendChild(table);
+                })
+                .catch((error) => {
+                    console.error("Error fetching data:", error);
+                });
+        });
+    </script>
+</body>
+
+</html

@@ -1,0 +1,38 @@
+[
+  {
+    "name": "gokul",
+    "email": "lal@gmdwdwaikl.com",
+    "age": "45",
+    "id": "44"
+  },
+  {
+    "name": "leena",
+    "email": "hey@gmail.com",
+    "age": "22",
+    "id": "22"
+  },
+  {
+    "name": "anurag",
+    "email": "anurag@gmail.com",
+    "age": "25",
+    "id": "1"
+  },
+  {
+    "name": "rahul",
+    "email": "rahul@gmail.com",
+    "age": "25",
+    "id": "1"
+  },
+  {
+    "name": "lal",
+    "email": "lal@gmail.com",
+    "age": "32",
+    "id": "90"
+  },
+  {
+    "name": "ram",
+    "email": "ram@gmail.com",
+    "age": "26",
+    "id": "90"
+  }
+]

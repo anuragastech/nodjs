@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Display Data</title>
+    <style>
+        table,
+        th,
+        td {
+            border: 1px solid gainsboro;
+            align-items: center;
+        }
+
+        body {
+            background-color: black;
+            width: 100%;
+            color: white;
+        }
+
+        th {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Stored Data</h1>
+
+  
+
+    <form action="/submit" method="POST">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" required><br><br>
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" required><br><br>
+        <label for="id">Id</label>
+        <input type="text" id="id" name="id"><br><br>
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age" required><br><br>
+        <button type="submit">Submit</button>
+    </form>
+
+    <script>
+        // JavaScript code can go here if needed
+    </script>
+</body>
+
+</html>
